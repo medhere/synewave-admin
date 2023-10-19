@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('token_purchases', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('toekn_name')->nullable();
+            $table->string('token_name')->nullable();
             $table->float('token_price')->default(0);
             $table->integer('credits')->default(0);
             $table->string('token_to_expie')->nullable();
