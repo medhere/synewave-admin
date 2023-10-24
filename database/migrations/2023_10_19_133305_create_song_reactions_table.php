@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('token_purchases', function (Blueprint $table) {
+        Schema::create('song_reactions', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('token_name')->nullable();
-            $table->float('token_price')->default(0);
-            $table->integer('credits')->default(0);
-            $table->string('token_to_expire')->nullable();
-            $table->string('token_purchase_txref');
-            $table->integer('token_purchase_by');
+            $table->integer('song_id')->constrained('songs')->cascadeOnDelete();
+            $table->integer('reaction')->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('token_purchases');
+        Schema::dropIfExists('song_reactions');
     }
 };

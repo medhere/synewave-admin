@@ -4,8 +4,11 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TokenPurchaseResource\Pages;
 use App\Filament\Resources\TokenPurchaseResource\RelationManagers;
+use App\Models\TokenList;
 use App\Models\TokenPurchase;
+use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -23,26 +26,19 @@ class TokenPurchaseResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('user_id')
+                Select::make('user_id')->label('Artist')
+                    ->options(User::where('role', 'artist')->pluck('name', 'id'))
+                    ->searchable()
+                    ->loadingMessage('Loading artists...')
+                    ->searchPrompt('Search artists by their name')
+                    ->optionsLimit(20)
                     ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('toekn_name')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('token_price')
+                    ->native(false),
+                Select::make('token_list_id')->label('Token')
+                    ->options(TokenList::pluck('token_name', 'id'))
+                    ->searchable()
                     ->required()
-                    ->numeric()
-                    ->default(0.00),
-                Forms\Components\TextInput::make('credits')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Forms\Components\TextInput::make('token_to_expie')
-                    ->maxLength(255),
-                Forms\Components\DatePicker::make('token_purchase_on')
-                    ->required(),
-                Forms\Components\TextInput::make('token_purchase_by')
-                    ->required()
-                    ->numeric(),
+                    ->native(false),
             ]);
     }
 
@@ -50,18 +46,20 @@ class TokenPurchaseResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('toekn_name')
+                Tables\Columns\TextColumn::make('user_id'),
+                // Tables\Columns\TextColumn::make('token_owner.name')
+                //     ->numeric()
+                //     ->sortable(),
+                Tables\Columns\TextColumn::make('token_name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('token_price')
+                ->money('N')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('credits')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('token_to_expie')
+                Tables\Columns\TextColumn::make('token_to_expire')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('token_purchase_on')
                     ->date()
@@ -91,14 +89,14 @@ class TokenPurchaseResource extends Resource
                 ]),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -107,5 +105,5 @@ class TokenPurchaseResource extends Resource
             'view' => Pages\ViewTokenPurchase::route('/{record}'),
             'edit' => Pages\EditTokenPurchase::route('/{record}/edit'),
         ];
-    }    
+    }
 }

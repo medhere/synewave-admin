@@ -5,19 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Song extends Model
+class SongReaction extends Model
 {
     use HasFactory;
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    
-    public function song_reactions(): HasMany
+
+    public function song(): BelongsTo
     {
-        return $this->hasMany(SongReaction::class, 'song_id', 'id');
+        return $this->belongsTo(Song::class, 'user_id', 'other_key');
     }
 }

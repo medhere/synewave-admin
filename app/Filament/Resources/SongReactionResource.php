@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Artists\Resources;
+namespace App\Filament\Resources;
 
-use App\Filament\Artists\Resources\WalletHistoryResource\Pages;
-use App\Filament\Artists\Resources\WalletHistoryResource\RelationManagers;
-use App\Models\WalletHistory;
+use App\Filament\Resources\SongReactionResource\Pages;
+use App\Filament\Resources\SongReactionResource\RelationManagers;
+use App\Models\SongReaction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,9 +14,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class WalletHistoryResource extends Resource
+class SongReactionResource extends Resource
 {
-    protected static ?string $model = WalletHistory::class;
+    protected static ?string $model = SongReaction::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -32,16 +32,14 @@ class WalletHistoryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('credit_from_id'),
-                TextColumn::make('credit_to_id'),
-                TextColumn::make('credits'),
-                TextColumn::make('song_id'),
+                TextColumn::make('user.name')->label('Artist'),
+                TextColumn::make('song.song_title')->label('Song'),
+                TextColumn::make('reaction'),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -61,10 +59,9 @@ class WalletHistoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListWalletHistories::route('/'),
-            // 'create' => Pages\CreateWalletHistory::route('/create'),
-            // 'view' => Pages\ViewWalletHistory::route('/{record}'),
-            // 'edit' => Pages\EditWalletHistory::route('/{record}/edit'),
+            'index' => Pages\ListSongReactions::route('/'),
+            // 'create' => Pages\CreateSongReaction::route('/create'),
+            // 'edit' => Pages\EditSongReaction::route('/{record}/edit'),
         ];
     }    
 }

@@ -36,6 +36,31 @@ return [
             'throw' => false,
         ],
 
+        'avatar' => [
+            'driver' => 'local',
+            'root' => public_path('storage/avatar'),
+            'url' => env('APP_URL').'/storage/avatar',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'art' => [
+            'driver' => 'local',
+            'root' => public_path('storage/art'),
+            'url' => env('APP_URL').'/storage/art',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'songs' => [
+            'driver' => 'local',
+            'root' => public_path('storage/songs'),
+            'url' => env('APP_URL').'/storage/songs',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

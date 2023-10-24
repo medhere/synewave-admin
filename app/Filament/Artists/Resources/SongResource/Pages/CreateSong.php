@@ -9,4 +9,10 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateSong extends CreateRecord
 {
     protected static string $resource = SongResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['user_id'] = auth()->user()->id;
+        return $data;
+    }
 }

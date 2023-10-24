@@ -5,7 +5,10 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\SongResource\Pages;
 use App\Filament\Resources\SongResource\RelationManagers;
 use App\Models\Song;
+use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -23,10 +26,14 @@ class SongResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('user_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('song_name')
+                Select::make('user_id')
+                    ->label('Artist')
+                    ->native(false)
+                    ->options(User::where('role', 'artist')
+                    ->pluck('name', 'id'))
+                    ->required(),
+                Forms\Components\TextInput::make('song_title')
+                    ->autocapitalize('words')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('song_desc')
@@ -36,14 +43,26 @@ class SongResource extends Resource
                 Forms\Components\TextInput::make('song_album')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('song_track_no')
+                    ->numeric()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('song_plays')
+                Forms\Components\TextInput::make('song_streams')
                     ->required()
                     ->numeric()
                     ->default(0),
-                Forms\Components\TextInput::make('song_stored')
+                Forms\Components\TextInput::make('song_credits')
                     ->required()
-                    ->maxLength(255),
+                    ->numeric()
+                    ->default(0.50),
+                FileUpload::make('song_art')
+                    ->required()
+                    ->openable()
+                    ->disk('art')
+                    ->image()
+                    ->imageEditor(),
+                FileUpload::make('song_stored')->label('Upload Song')
+                    ->required()
+                    ->openable()
+                    ->disk('songs'),
             ]);
     }
 
@@ -51,10 +70,9 @@ class SongResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('user.name')->label('Artist')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('song_name')
+                Tables\Columns\TextColumn::make('song_title')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('song_desc')
                     ->searchable(),
@@ -62,13 +80,9 @@ class SongResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('song_album')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('song_track_no')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('song_plays')
+                Tables\Columns\TextColumn::make('song_streams')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('song_stored')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -91,14 +105,14 @@ class SongResource extends Resource
                 ]),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -107,5 +121,5 @@ class SongResource extends Resource
             'view' => Pages\ViewSong::route('/{record}'),
             'edit' => Pages\EditSong::route('/{record}/edit'),
         ];
-    }    
+    }
 }

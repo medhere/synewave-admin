@@ -14,12 +14,14 @@ return new class extends Migration
         Schema::create('songs', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('song_name');
+            $table->string('song_title');
+            $table->string('song_art')->nullable();
             $table->string('song_desc')->nullable();
             $table->string('song_feat')->nullable();
             $table->string('song_album')->nullable();
             $table->string('song_track_no')->nullable();
-            $table->integer('song_plays')->default(0);
+            $table->integer('song_streams')->default(0);
+            $table->float('song_credits')->default(0.5);
             $table->string('song_stored');
             $table->timestamps();
         });

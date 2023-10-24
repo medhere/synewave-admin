@@ -10,6 +10,8 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -34,7 +36,15 @@ class UserResource extends Resource
                     'artist'=>'Artist',
                 ])->required(),
                 TextInput::make('name')->required()->autocapitalize('words'),
-                TextInput::make('nickname')->required(),
+                TextInput::make('nickname')->required()
+                ->unique()
+                // ->afterStateUpdated(function (?string $state, ?string $old, Set $set) {
+                //     $user = User::where('nickname', $state)->first('nickname');
+                //     if ($state == $user['nickname']) $set('errors.nickname', "Nickname $state is already in use.");
+                //     else unset($state['errors']['nickname']);  
+                // })
+                // ->live(onBlur: true)
+                ,
                 TextInput::make('phone')->tel()->required(),
                 TextInput::make('email')->email()->required(),
                 DatePicker::make('dob')->label('Date of Birth')->native(false),

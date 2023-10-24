@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\ArtistAuthenticate;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -24,9 +25,12 @@ class ArtistsPanelProvider extends PanelProvider
     {
         return $panel
             ->id('artists')
-            ->path('artists')
+            ->path('artist')
+            ->login()
+            ->registration()
+            ->emailVerification()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Blue,
             ])
             ->discoverResources(in: app_path('Filament/Artists/Resources'), for: 'App\\Filament\\Artists\\Resources')
             ->discoverPages(in: app_path('Filament/Artists/Pages'), for: 'App\\Filament\\Artists\\Pages')
@@ -35,8 +39,8 @@ class ArtistsPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Artists/Widgets'), for: 'App\\Filament\\Artists\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                // Widgets\AccountWidget::class,
+                // Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -51,6 +55,7 @@ class ArtistsPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                ArtistAuthenticate::class
             ]);
     }
 }

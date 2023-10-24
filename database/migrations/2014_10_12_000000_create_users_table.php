@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('dob')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->integer('wallet')->default(0);
+            $table->float('wallet')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
