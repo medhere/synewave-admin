@@ -26,11 +26,11 @@ class TokenPurchaseResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('user_id')->label('Artist')
-                    ->options(User::where('role', 'artist')->pluck('name', 'id'))
+                Select::make('user_id')->label('Users')
+                    ->options(User::where('role', 'user')->pluck('name', 'id'))
                     ->searchable()
-                    ->loadingMessage('Loading artists...')
-                    ->searchPrompt('Search artists by their name')
+                    ->loadingMessage('Loading users...')
+                    ->searchPrompt('Search users by their name')
                     ->optionsLimit(20)
                     ->required()
                     ->native(false),

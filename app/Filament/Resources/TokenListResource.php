@@ -70,7 +70,7 @@ class TokenListResource extends Resource
         return [
             'index' => Pages\ListTokenLists::route('/'),
             'create' => Pages\CreateTokenList::route('/create'),
-            'view' => Pages\ViewTokenList::route('/{record}'),
+            // 'view' => Pages\ViewTokenList::route('/{record}'),
             'edit' => Pages\EditTokenList::route('/{record}/edit'),
         ];
     }    

@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class WalletHistory extends Model
 {
     use HasFactory;
+
+    public function playlist(){
+        $this->belongsTo(Playlist::class);
+    }
 }

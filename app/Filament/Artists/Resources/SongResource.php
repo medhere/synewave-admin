@@ -24,10 +24,6 @@ class SongResource extends Resource
     {
         return $form
             ->schema([
-                // Forms\Components\TextInput::make('user_id')
-                //     ->label('Artist')
-                //     ->hidden()
-                //     ->required(),
                 Forms\Components\TextInput::make('song_title')
                     ->required()
                     ->maxLength(255),
@@ -46,15 +42,15 @@ class SongResource extends Resource
                     ->default(0.50),
                 FileUpload::make('song_art')
                     ->required()
-                    ->openable()
+                    // ->openable()
                     ->disk('art')
                     ->image()
-                    ->deletable()
+                    ->hiddenOn('edit')
                     ->imageEditor(),
                 FileUpload::make('song_stored')->label('Upload Song')
                     ->required()
-                    ->deletable()
-                    ->openable()
+                    // ->openable()
+                    ->hiddenOn('edit')
                     ->disk('songs'),
             ]);
     }

@@ -10,10 +10,4 @@ class ViewTokenList extends ViewRecord
 {
     protected static string $resource = TokenListResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\EditAction::make(),
-        ];
-    }
 }

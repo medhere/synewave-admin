@@ -48,5 +48,8 @@ class User extends Authenticatable implements FilamentUser
         $this->hasMany(TokenPurchase::class);
     }
 
+    public function playlists(){
+        $this->hasMany(Playlist::class);
+    }
 
 }

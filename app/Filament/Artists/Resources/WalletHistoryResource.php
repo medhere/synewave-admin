@@ -32,10 +32,10 @@ class WalletHistoryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('credit_from_id'),
-                TextColumn::make('credit_to_id'),
+                TextColumn::make('credit_from_id')->label('User'),
+                TextColumn::make('credit_to_id')->label('Artist'),
                 TextColumn::make('credits'),
-                TextColumn::make('song_id'),
+                TextColumn::make('playlist_name')->label('Playlist'),
             ])
             ->filters([
                 //
@@ -62,9 +62,7 @@ class WalletHistoryResource extends Resource
     {
         return [
             'index' => Pages\ListWalletHistories::route('/'),
-            // 'create' => Pages\CreateWalletHistory::route('/create'),
             // 'view' => Pages\ViewWalletHistory::route('/{record}'),
-            // 'edit' => Pages\EditWalletHistory::route('/{record}/edit'),
         ];
     }    
 }

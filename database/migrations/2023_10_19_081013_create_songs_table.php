@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('song_album')->nullable();
             $table->string('song_track_no')->nullable();
             $table->integer('song_streams')->default(0);
-            $table->float('song_credits')->default(0.5);
+            // $table->float('song_credits')->default(0.5);
             $table->string('song_stored');
             $table->timestamps();
         });

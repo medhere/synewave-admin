@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\WalletHistoryResource\Pages;
 
 use App\Filament\Resources\WalletHistoryResource;
+use App\Models\Playlist;
 use App\Models\User;
 use Filament\Actions;
 use Filament\Notifications\Notification;
@@ -19,7 +20,12 @@ class CreateWalletHistory extends CreateRecord
     {
 
         $user_id = $data['credit_from_id'];
-        $credit = $data['credit'];
+        $playlist_id = $data['playlist_id'];
+            $playlist = Playlist::where('id', $playlist_id)->first();
+        if(!isset($data['credits'])) $data['credits'] = $playlist->playlist_credits;
+        
+        $credit = $data['credits'];
+        unset($data['enable_credits']);
 
         $user = User::find($user_id);
         if($user['wallet'] < $credit) return Notification::make()->warning()

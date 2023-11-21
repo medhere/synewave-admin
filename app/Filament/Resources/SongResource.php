@@ -45,23 +45,17 @@ class SongResource extends Resource
                 Forms\Components\TextInput::make('song_track_no')
                     ->numeric()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('song_streams')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Forms\Components\TextInput::make('song_credits')
-                    ->required()
-                    ->numeric()
-                    ->default(0.50),
                 FileUpload::make('song_art')
                     ->required()
-                    ->openable()
+                    // ->openable()
                     ->disk('art')
                     ->image()
+                    ->hiddenOn('edit')
                     ->imageEditor(),
                 FileUpload::make('song_stored')->label('Upload Song')
                     ->required()
-                    ->openable()
+                    // ->openable()
+                    ->hiddenOn('edit')
                     ->disk('songs'),
             ]);
     }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('token_name')->nullable();
             $table->float('token_price')->default(0);
             $table->integer('credits')->default(0);
-            $table->string('token_to_expire')->nullable();
+            // $table->string('token_to_expire')->nullable();
             $table->string('token_purchase_txref');
             $table->integer('token_purchase_by');
             $table->timestamps();

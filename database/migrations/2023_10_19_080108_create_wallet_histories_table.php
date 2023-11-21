@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('wallet_histories', function (Blueprint $table) {
             $table->id();
-            $table->integer('credit_from_id')->default(0);
-            $table->integer('credit_to_id')->default(0);
-            $table->integer('credits')->default(0);
-            $table->integer('song_id')->default(0);
+            $table->integer('credit_from_id')->default(0)->constrained(table: 'users', indexName: 'id')->cascadeOnDelete();
+            $table->integer('credit_to_id')->default(0)->constrained(table: 'users', indexName: 'id')->cascadeOnDelete();
+            $table->float('credits')->default(0);
+            $table->integer('playlist_id')->constrained('playlists')->cascadeOnDelete();
             $table->timestamps();
         });
     }

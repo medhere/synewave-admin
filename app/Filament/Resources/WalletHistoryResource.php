@@ -3,21 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\WalletHistoryResource\Pages;
-use App\Filament\Resources\WalletHistoryResource\RelationManagers;
-use App\Models\Song;
+use App\Models\Playlist;
 use App\Models\User;
 use App\Models\WalletHistory;
-use Filament\Forms;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class WalletHistoryResource extends Resource
 {
@@ -30,17 +29,42 @@ class WalletHistoryResource extends Resource
         return $form
             ->schema([
                 Select::make('credit_from_id')->label('Credit From User')
-                    ->native(false)->options(User::where('role', 'user')->pluck('name', 'id'))->required(),
+                    ->native(false)->options(User::where('role', 'user')->pluck('name', 'id'))->required()->live(),
                 Select::make('credit_to_id')->label('Credit To Artist')
-                    ->native(false)->options(User::where('role', 'artist')->pluck('name', 'id'))->required(),
-                TextInput::make('credits')->numeric(),
-                Select::make('song_id')->label('Song')
-                    ->native(false)->options(
-                        function (Get $get) {
-                            $credit_to_id = $get('credit_to_id');
-                            return Song::where('user_id', $credit_to_id)->pluck('song_name', 'id');
-                        }
-                    )->required(),
+                    ->native(false)->options(User::where('role', 'artist')->pluck('name', 'id'))->required()->live(),
+                Section::make()
+                    ->columns([
+                        'sm' => 1,
+                        'xl' => 3,
+                        '2xl' => 3,
+                    ])
+                    ->schema([
+                        Select::make('playlist_id')->label('Playlist')
+                            ->native(false)
+                            ->hidden(fn (Get $get): bool => ! $get('credit_to_id'))
+                            ->options(
+                                function (Get $get) {
+                                    $credit_to_id = $get('credit_to_id');
+                                    return Playlist::where('user_id', $credit_to_id)->pluck('playlist_name', 'id');
+                                }
+                            )->live()
+                            ->afterStateUpdated(function($state, Set $set){
+                                    $playlist_id = $state;
+                                    $playlist = Playlist::where('id', $playlist_id)->first();                                    
+                                    if($playlist_id) $set('credits', $playlist->playlist_credits);
+                                    else $set('credits', '0');
+                            })
+                            ->required(),
+                        Toggle::make('enable_credits')
+                            ->hidden(fn (Get $get): bool => ! $get('credit_from_id'))    
+                            ->live()
+                            ->inline(false),
+                        TextInput::make('credits')
+                            ->dehydrated()
+                            ->disabled(fn (Get $get): bool => ! $get('enable_credits'))
+                            ->hidden(fn (Get $get): bool => ! $get('credit_from_id'))
+                            ->numeric(),
+                    ]),
             ]);
     }
 
@@ -48,10 +72,14 @@ class WalletHistoryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('credit_from_id'),
-                TextColumn::make('credit_to_id'),
+                TextColumn::make('credit_from_id')->label('User'),
+                TextColumn::make('credit_to_id')->label('Artist'),
                 TextColumn::make('credits'),
-                TextColumn::make('song_id'),
+                TextColumn::make('playlist_name')
+                ->getStateUsing(function ($record) {
+                    // return $record;
+                })
+                ->label('Playlist'),
             ])
             ->filters([
                 //
