@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('dob')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('password_reset')->nullable();
             $table->string('password');
             $table->float('wallet')->default(0);
             $table->rememberToken();
