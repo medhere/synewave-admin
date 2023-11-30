@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('playlists', function (Blueprint $table) {
+        Schema::create('user_playlists', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('playlist_name');
-            $table->integer('playlist_streams')->default(0);
-            $table->float('playlist_credits')->default(0);
-            $table->integer('playlist_expiration_in_days')->default(30);
+            $table->integer('playlist_id')->constrained('playlists')->cascadeOnDelete();
+            $table->date('playlist_to_expire');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('playlists');
+        Schema::dropIfExists('user_playlists');
     }
 };

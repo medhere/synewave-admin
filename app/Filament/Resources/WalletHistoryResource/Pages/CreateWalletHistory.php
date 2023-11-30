@@ -28,8 +28,7 @@ class CreateWalletHistory extends CreateRecord
         unset($data['enable_credits']);
 
         $user = User::find($user_id);
-        if($user['wallet'] < $credit) return Notification::make()->warning()
-        ->title('Wallet Transaction')->body('Wallet to low!');
+        if($user['wallet'] < $credit) return Notification::make()->warning()->title('Wallet Transaction')->body('Wallet to low!');
 
         return $data;
     }

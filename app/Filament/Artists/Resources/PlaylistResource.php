@@ -31,6 +31,10 @@ class PlaylistResource extends Resource
                     ->required()
                     ->numeric()
                     ->default(0.50),
+                Forms\Components\TextInput::make('playlist_expiration_in_days')
+                    ->required()
+                    ->numeric()
+                    ->default(30),
             ]);
     }
 
@@ -46,6 +50,8 @@ class PlaylistResource extends Resource
                 Tables\Columns\TextColumn::make('playlist_credits')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('playlist_expiration_in_days')
+                    ->dateTime(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -68,14 +74,14 @@ class PlaylistResource extends Resource
                 ]),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             PlaylistsongsRelationManager::class,
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -84,5 +90,5 @@ class PlaylistResource extends Resource
             'view' => Pages\ViewPlaylist::route('/{record}'),
             'edit' => Pages\EditPlaylist::route('/{record}/edit'),
         ];
-    }    
+    }
 }
