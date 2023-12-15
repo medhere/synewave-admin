@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('unique_id');
             $table->enum('role', ['admin', 'user', 'artist']);
             $table->string('name');
-            $table->string('nickname')->unique();
-            $table->string('phone');
+            $table->string('nickname')->unique()->nullable();
+            $table->string('phone')->nullable();
             $table->string('email')->unique();
             $table->string('dob')->nullable();
             $table->timestamp('email_verified_at')->nullable();

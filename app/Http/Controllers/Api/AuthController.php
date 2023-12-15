@@ -20,9 +20,12 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
         ]);
+      
+      	//dd($validatedData);
 
         $validatedData['password'] = Hash::make($validatedData['password']);
         $validatedData['role'] = 'user';
+        $validatedData['unique_id'] = rand(10000000, 99999999);
 
         if (User::create($validatedData)) {
             return response()->json(null, 201);

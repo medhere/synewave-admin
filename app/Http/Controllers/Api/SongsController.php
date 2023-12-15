@@ -15,7 +15,7 @@ class SongsController extends Controller
         //FIXME: should song be transcoded here and streamed?
     }
 
-    public function getSongReaction($id){
+    public function getSongReactions($id){
         $likes = SongReaction::where(['song_id' => $id, 'reaction' => 1])->count();
         $dislikes = SongReaction::where(['song_id' => $id, 'reaction' => 0])->count();
         return [
@@ -24,11 +24,11 @@ class SongsController extends Controller
         ];
     }    
 
-    public function postReaction($song_id, $reaction)
+    public function postSongReaction($id, $reaction)
     {
         if (auth()->user()->role === 'user') {
             $reaction = SongReaction::updateOrCreate(
-                ['user_id' => auth()->user()->id, 'song_id' => $song_id],
+                ['user_id' => auth()->user()->id, 'song_id' => $id],
                 ['reaction' => $reaction]
             );
             return response($reaction);

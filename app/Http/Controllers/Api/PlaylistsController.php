@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Playlist;
+use App\Models\PlaylistSong;
 use App\Models\User;
 use App\Models\UserPlaylist;
 use App\Models\WalletHistory;
@@ -12,6 +13,12 @@ use Illuminate\Support\Facades\DB;
 
 class PlaylistsController extends Controller
 {
+    public function latestPlaylists()
+    {
+        $playlists = Playlist::latest()->limit(12)->get();
+        return $playlists;
+    }
+    
     public function randomPlaylists($count = 20)
     {
         $playlists = Playlist::inRandomOrder()->limit($count)->get();
@@ -20,12 +27,13 @@ class PlaylistsController extends Controller
 
     public function allPlaylists($count = 20)
     {
-        $playlists = Playlist::paginate($count)->inRandomOrder();
+        $playlists = Playlist::inRandomOrder()->paginate($count);
         return $playlists;
     }
 
-    public function searchPlaylists($search = "", $count = 20)
+    public function searchPlaylists($count = 20)
     {
+        $search = request('search');
         $playlists = Playlist::when($search !== "", function ($query) use ($search) {
             $query
                 ->where('playlist_name', 'like', "%$search%");
@@ -36,17 +44,22 @@ class PlaylistsController extends Controller
 
     public function viewArtistPlaylist($user_id)
     {
-        return Playlist::where('user_id', $user_id)->get();
+        return Playlist::where('user_id', $user_id)->with('playlistsongs')->get();
     }
 
     public function viewPlaylist($id)
     {
-        return Playlist::where('id', $id)->get();
+        return Playlist::where('id', $id)->with('playlistsongs')->get();
     }
 
     public function getPlaylistSongs($id)
     {
-        return Playlist::where('id', $id)->with('playlistsongs')->get();
+        return PlaylistSong::where('playlist_id', $id)
+        ->join('songs','playlist_songs.song_id','=','songs.id')
+        ->get([
+            'songs.*',
+            'playlist_songs.*'
+        ]);
     }
 
     public function viewUserPlaylists()

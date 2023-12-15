@@ -10,23 +10,33 @@ class ArtistsController extends Controller
 {
     private function artists()
     {
-        return User::where('role', 'artists')->select(['id', 'name', 'nickname']);
+        return User::select(['id', 'name', 'nickname'])->where('role', 'artist');
     }
 
-    public function randomArtsists($count = 20)
+    public function randomArtists($count = 20)
     {
-        $artists = $this->artists()->inRandomOrder()->limit($count)->get();
+        $artists = $this->artists()
+        ->inRandomOrder()
+        ->limit($count)
+        ->get();
         return $artists;
     }
 
-    public function allArtsists($count = 20)
+    public function latestArtists()
     {
-        $artists = $this->artists()->paginate($count)->inRandomOrder();
+        $artists = $this->artists()->latest()->paginate(12);
         return $artists;
     }
 
-    public function searchArtsists($search = "", $count = 20)
+    public function allArtists($count = 20)
     {
+        $artists = $this->artists()->inRandomOrder()->paginate($count);
+        return $artists;
+    }
+
+    public function searchArtists($count = 20)
+    {
+        $search = request('search');
         $artists = $this->artists()
             ->when($search !== "", function ($query) use ($search) {
                 $query
@@ -37,7 +47,7 @@ class ArtistsController extends Controller
         return $artists;
     }
 
-    public function viewArtsist($id)
+    public function viewArtist($id)
     {
         return $this->artists()->where('id', $id)->get();
     }

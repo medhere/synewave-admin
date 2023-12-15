@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Http;
 
 class TokensController extends Controller
 {
-    public function wallet_history()
+    public function walletHistory()
     {
         return WalletHistory::where('credit_from_id', auth()->user()->id)
             ->leftjoin('users as artists', 'artists.id', '=', 'wallet_histories.credit_to_id')
@@ -37,7 +37,7 @@ class TokensController extends Controller
 
         // Make a GET request to the Paystack endpoint
         $response = Http::withHeaders([
-            'Authorization' => "Bearer " . env('PAYSTACK_SECRET'),
+            'Authorization' => "Bearer " . env('PAYSTACK_SECRET_KEY'),
         ])->get('https://api.paystack.co/transaction/verify/' . $tx_ref)->json();
 
         // Process the response
