@@ -33,20 +33,36 @@ class PlaylistResource extends Resource
                     ->label('Artist')
                     ->native(false)
                     ->options(User::where('role', 'artist')
-                    ->pluck('name', 'id'))
+                        ->pluck('name', 'id'))
                     ->required(),
                 Forms\Components\TextInput::make('playlist_name')
                     ->required()
                     ->maxLength(255),
-                // Forms\Components\TextInput::make('playlist_streams')
-                //     ->required()
-                //     ->numeric()
-                //     ->default(0),
                 Forms\Components\TextInput::make('playlist_credits')
                     ->required()
                     ->numeric()
                     ->default(0.50),
-                    Forms\Components\TextInput::make('playlist_expiration_in_days')
+                Forms\Components\FileUpload::make('playlist_art')
+                    ->required()
+                    // ->openable()
+                    ->disk('playlist')
+                    ->image()
+                    ->hiddenOn('edit')
+                    ->imageEditor(),
+                Forms\Components\Select::make('playlist_genre')
+                    ->label('Artist')
+                    ->native(false)
+                    ->options([
+                        'Pop',
+                        'Hip-hop'
+                    ])
+                    ->required(),
+                // Forms\Components\TextInput::make('playlist_streams')
+                //     ->required()
+                //     ->numeric()
+                //     ->default(0),
+
+                Forms\Components\TextInput::make('playlist_expiration_in_days')
                     ->required()
                     ->numeric()
                     ->default(30),
@@ -91,7 +107,7 @@ class PlaylistResource extends Resource
                 ]),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
@@ -99,7 +115,7 @@ class PlaylistResource extends Resource
             // PlaylistResource::getRelations()
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -108,5 +124,5 @@ class PlaylistResource extends Resource
             'view' => Pages\ViewPlaylist::route('/{record}'),
             'edit' => Pages\EditPlaylist::route('/{record}/edit'),
         ];
-    }    
+    }
 }

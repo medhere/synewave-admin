@@ -10,7 +10,7 @@ class ArtistsController extends Controller
 {
     private function artists()
     {
-        return User::select(['id', 'name', 'nickname'])->where('role', 'artist');
+        return User::select(['id', 'name', 'nickname', 'avatar'])->where('role', 'artist');
     }
 
     public function randomArtists($count = 20)

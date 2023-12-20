@@ -18,7 +18,7 @@ class PlaylistsController extends Controller
         $playlists = Playlist::latest()->limit(12)->get();
         return $playlists;
     }
-    
+
     public function randomPlaylists($count = 20)
     {
         $playlists = Playlist::inRandomOrder()->limit($count)->get();
@@ -55,11 +55,11 @@ class PlaylistsController extends Controller
     public function getPlaylistSongs($id)
     {
         return PlaylistSong::where('playlist_id', $id)
-        ->join('songs','playlist_songs.song_id','=','songs.id')
-        ->get([
-            'songs.*',
-            'playlist_songs.*'
-        ]);
+            ->join('songs', 'playlist_songs.song_id', '=', 'songs.id')
+            ->get([
+                'songs.*',
+                'playlist_songs.*'
+            ]);
     }
 
     public function viewUserPlaylists()
@@ -111,12 +111,21 @@ class PlaylistsController extends Controller
 
         if (!$buy_playlist || !$user1 || !$user2 || !$add_to_user_playlists) {
             DB::rollBack();
-        }else{
-            DB::commit();    
+        } else {
+            DB::commit();
             return response('Playlist added');
         }
 
         return response('Error adding playlist', 400);
+    }
 
+    public function getGenres()
+    {
+        return Playlist::select('playlist_genre')->distinct()->get();
+    }
+
+    public function getPlaylistGenres($genre)
+    {
+        return Playlist::where('playlist_genre', $genre)->with('playlistsongs')->get();
     }
 }

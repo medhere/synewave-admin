@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('playlist_name');
+            $table->string('playlist_art')->nullable();
+            $table->string('playlist_genre')->nullable();
             $table->integer('playlist_streams')->default(0);
             $table->float('playlist_credits')->default(0);
             $table->integer('playlist_expiration_in_days')->default(30);

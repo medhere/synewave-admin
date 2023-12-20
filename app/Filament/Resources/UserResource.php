@@ -33,13 +33,14 @@ class UserResource extends Resource
             ->schema([
                 // TextInput::make('unique_id'),
                 Select::make('role')->native(false)->options([
-                    'admin'=>'Admin',
-                    'user'=>'User',
-                    'artist'=>'Artist',
+                    'admin' => 'Admin',
+                    'user' => 'User',
+                    'artist' => 'Artist',
                 ])->required(),
                 TextInput::make('name')->required()->autocapitalize('words'),
                 TextInput::make('nickname')->required()
-                ->unique()
+                    ->unique()
+
                 // ->afterStateUpdated(function (?string $state, ?string $old, Set $set) {
                 //     $user = User::where('nickname', $state)->first('nickname');
                 //     if ($state == $user['nickname']) $set('errors.nickname', "Nickname $state is already in use.");
@@ -47,6 +48,13 @@ class UserResource extends Resource
                 // })
                 // ->live(onBlur: true)
                 ,
+                Forms\Components\FileUpload::make('avatar')
+                    ->required()
+                    // ->openable()
+                    ->disk('avatar')
+                    ->image()
+                    ->hiddenOn('edit')
+                    ->imageEditor(),
                 TextInput::make('phone')->tel()->required(),
                 TextInput::make('email')->email()->required(),
                 DatePicker::make('dob')->label('Date of Birth')->native(false),
@@ -80,7 +88,7 @@ class UserResource extends Resource
                 ]),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
@@ -88,7 +96,7 @@ class UserResource extends Resource
             // SongsRelationManager::class
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -97,5 +105,5 @@ class UserResource extends Resource
             'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
-    }    
+    }
 }

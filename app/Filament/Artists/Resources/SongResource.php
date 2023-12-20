@@ -36,10 +36,6 @@ class SongResource extends Resource
                 Forms\Components\TextInput::make('song_track_no')
                     ->numeric()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('song_credits')
-                    ->required()
-                    ->numeric()
-                    ->default(0.50),
                 FileUpload::make('song_art')
                     ->required()
                     // ->openable()

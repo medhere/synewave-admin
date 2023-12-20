@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('unique_id');
             $table->enum('role', ['admin', 'user', 'artist']);
             $table->string('name');
+            $table->string('avatar')->nullable();
             $table->string('nickname')->unique()->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->unique();

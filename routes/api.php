@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ArtistsController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PlaylistsController;
+use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SongsController;
 use App\Http\Controllers\Api\TokensController;
 use Illuminate\Http\Request;
@@ -81,6 +82,10 @@ Route::middleware('auth:sanctum')->group(function () {
 		
 		//make use of confirmation prompt
 		Route::get('selectPlaylist/{id}', [PlaylistsController::class, 'selectPlaylist']);
+
+		Route::get('get-genres', [PlaylistsController::class, 'getGenres']);
+		Route::get('get-playlist-by-genre/{genre}', [PlaylistsController::class, 'getPlaylistGenres']);
+
 	});
 
 
@@ -91,6 +96,9 @@ Route::middleware('auth:sanctum')->group(function () {
 		//reaction is 1 or 0 for like or dislike
 		Route::get('post-song-reaction/{id}/{reaction}', [SongsController::class, 'postSongReaction']);
 
+		Route::get('get-latest-songs/{user_id?}/{count?}', [SongsController::class, 'get_latest_songs']);
+		Route::get('get-playlist-from-song/{song_id}', [SongsController::class, 'get_playlists_from_song']);
+
 	});
 
 
@@ -99,6 +107,8 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::get('get', [TokensController::class, 'getTokens']);
 		Route::get('buy/{tx_ref}', [TokensController::class, 'buyToken']);
 	});
+
+	Route::post('search', [SearchController::class, 'search']);
 
 
 });

@@ -54,7 +54,7 @@ class SongResource extends Resource
                     ->imageEditor(),
                 FileUpload::make('song_stored')->label('Upload Song')
                     ->required()
-                    // ->openable()
+                    ->openable()
                     ->hiddenOn('edit')
                     ->disk('songs'),
             ]);

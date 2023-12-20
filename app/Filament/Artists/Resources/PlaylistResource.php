@@ -31,6 +31,21 @@ class PlaylistResource extends Resource
                     ->required()
                     ->numeric()
                     ->default(0.50),
+                Forms\Components\FileUpload::make('playlist_art')
+                    ->required()
+                    // ->openable()
+                    ->disk('playlist')
+                    ->image()
+                    ->hiddenOn('edit')
+                    ->imageEditor(),
+                Forms\Components\Select::make('playlist_genre')
+                    ->label('Artist')
+                    ->native(false)
+                    ->options([
+                        'Pop',
+                        'Hip-hop'
+                    ])
+                    ->required(),
                 Forms\Components\TextInput::make('playlist_expiration_in_days')
                     ->required()
                     ->numeric()
