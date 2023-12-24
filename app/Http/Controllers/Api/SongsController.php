@@ -43,7 +43,7 @@ class SongsController extends Controller
     {
         $songs = Song::latest()
             ->when($user_id !== null, function ($query) use ($user_id) {
-                $query->where('id', $user_id);
+                $query->where('user_id', $user_id);
             })
             ->limit($count)
             ->with('user')

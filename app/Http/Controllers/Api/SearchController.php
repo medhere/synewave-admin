@@ -15,20 +15,20 @@ class SearchController extends Controller
         $search = request('search');
 
         $artists = User::inRandomOrder()
-            ->select(['id', 'name', 'nickname'])
+            ->select(['id', 'name', 'nickname', 'avatar'])
             ->where('role', 'artist')
             ->where(function ($query) use ($search) {
                 $query->where('name', 'like', "%$search%")
                     ->orWhere('nickname', 'like', "%$search%");
-            });
+            })->get();
 
         $playlists = Playlist::inRandomOrder()
-            ->where('playlist', 'like', "%$search%")
+            ->where('playlist_name', 'like', "%$search%")
             ->with('playlistsongs')
             ->get();
 
         $songs = Song::inRandomOrder()
-            ->where('playlist', 'like', "%$search%")
+            ->where('song_title', 'like', "%$search%")
             ->with('user')
             ->get();
 
